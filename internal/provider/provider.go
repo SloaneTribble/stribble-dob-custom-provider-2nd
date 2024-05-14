@@ -35,7 +35,7 @@ type devopsBootcampProvider struct {
 }
 
 func (p *devopsBootcampProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
-	resp.TypeName = "scaffolding"
+	resp.TypeName = "devops-bootcamp"
 	resp.Version = p.version
 }
 
@@ -50,7 +50,7 @@ func (p *devopsBootcampProvider) Schema(ctx context.Context, req provider.Schema
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"host": schema.StringAttribute{
-				MarkdownDescription: "Bootcamp endpoint -- host of the app",
+				MarkdownDescription: "Bootcamp endpoint -- host of the app!!!",
 				Required:            true,
 			},
 		},

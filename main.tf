@@ -7,7 +7,7 @@
  }
 
 provider "devops-bootcamp" {
-    host = "http://localhost:8080"
+    # host = "http://localhost:8080"
 }
 
 
