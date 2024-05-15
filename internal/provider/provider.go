@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/hashicorp/terraform-provider-scaffolding-framework/client"
+
 	// devops_resource "github.com/liatrio/devops-bootcamp/examples/ch7/devops-resources"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -17,6 +18,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 // Go structs for converting Go to json
@@ -58,6 +60,8 @@ func (p *devopsBootcampProvider) Schema(ctx context.Context, req provider.Schema
 }
 
 func (p *devopsBootcampProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
+	tflog.Info(ctx, "Configuring devops-bootcamp client")
+
 	// Retrieve provider data from configuration
 	var config devopsBootcampProviderModel
 	diags := req.Config.Get(ctx, &config)
@@ -106,6 +110,10 @@ func (p *devopsBootcampProvider) Configure(ctx context.Context, req provider.Con
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	ctx = tflog.SetField(ctx, "devops-bootcamp_host", host)
+
+	tflog.Debug(ctx, "Creating devops-bootcamp client")
 
 	// Create a new DevOps API client using the configuration values
 	client := client.NewClient(host)
