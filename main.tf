@@ -17,3 +17,8 @@ data "devops-bootcamp_engineer" "test" {
 output "test_output" {
   value = data.devops-bootcamp_engineer.test
 }
+
+resource "devops-bootcamp_engineer_resource" "sweet" {
+    name = "Sloane"
+    email = "sloane@dudes.com"
+}

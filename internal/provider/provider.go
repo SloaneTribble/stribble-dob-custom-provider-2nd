@@ -122,11 +122,13 @@ func (p *devopsBootcampProvider) Configure(ctx context.Context, req provider.Con
 	// type Configure methods.
 	resp.DataSourceData = client
 	resp.ResourceData = client
+
+	tflog.Info(ctx, "Configured devops-bootcamp client", map[string]any{"success": true})
 }
 
 func (p *devopsBootcampProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewExampleResource,
+		NewEngineerResource,
 	}
 }
 
