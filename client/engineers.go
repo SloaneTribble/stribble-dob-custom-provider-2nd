@@ -1,0 +1,135 @@
+package client
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+
+	devops_resource "github.com/liatrio/devops-bootcamp/examples/ch7/devops-resources"
+)
+
+// GetCoffees - Returns list of engineers (no auth required)
+func (c *Client) GetEngineers() (*[]devops_resource.Engineer, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/engineers", c.HostURL), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	engineers := []devops_resource.Engineer{}
+	err = json.Unmarshal(body, &engineers)
+	if err != nil {
+		return nil, err
+	}
+
+	return engineers, nil
+}
+
+// // GetCoffee - Returns specific coffee (no auth required)
+// func (c *Client) GetCoffee(coffeeID string) ([]Coffee, error) {
+// 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/coffees/%s", c.HostURL, coffeeID), nil)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	body, err := c.doRequest(req, nil)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	coffees := []Coffee{}
+// 	err = json.Unmarshal(body, &coffees)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	return coffees, nil
+// }
+
+// // GetCoffeeIngredients - Returns list of coffee ingredients (no auth required)
+// func (c *Client) GetCoffeeIngredients(coffeeID string) ([]Ingredient, error) {
+// 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/coffees/%s/ingredients", c.HostURL, coffeeID), nil)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	body, err := c.doRequest(req, nil)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	ingredients := []Ingredient{}
+// 	err = json.Unmarshal(body, &ingredients)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	return ingredients, nil
+// }
+
+// // CreateCoffee - Create new coffee
+// func (c *Client) CreateCoffee(coffee Coffee, authToken *string) (*Coffee, error) {
+// 	rb, err := json.Marshal(coffee)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	req, err := http.NewRequest("POST", fmt.Sprintf("%s/coffees", c.HostURL), strings.NewReader(string(rb)))
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	body, err := c.doRequest(req, authToken)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	newCoffee := Coffee{}
+// 	err = json.Unmarshal(body, &newCoffee)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	return &newCoffee, nil
+// }
+
+// // CreateCoffeeIngredient - Create new coffee ingredient
+// func (c *Client) CreateCoffeeIngredient(coffee Coffee, ingredient Ingredient, authToken *string) (*Ingredient, error) {
+// 	reqBody := struct {
+// 		CoffeeID     int    `json:"coffee_id"`
+// 		IngredientID int    `json:"ingredient_id"`
+// 		Quantity     int    `json:"quantity"`
+// 		Unit         string `json:"unit"`
+// 	}{
+// 		CoffeeID:     coffee.ID,
+// 		IngredientID: ingredient.ID,
+// 		Quantity:     ingredient.Quantity,
+// 		Unit:         ingredient.Unit,
+// 	}
+// 	rb, err := json.Marshal(reqBody)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	req, err := http.NewRequest("POST", fmt.Sprintf("%s/coffees/%d/ingredients", c.HostURL, coffee.ID), strings.NewReader(string(rb)))
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	body, err := c.doRequest(req, authToken)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	newIngredient := Ingredient{}
+// 	err = json.Unmarshal(body, &newIngredient)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	return &newIngredient, nil
+// }
