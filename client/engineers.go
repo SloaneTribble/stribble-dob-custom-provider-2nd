@@ -9,7 +9,7 @@ import (
 )
 
 // GetCoffees - Returns list of engineers (no auth required)
-func (c *Client) GetEngineers() (*[]devops_resource.Engineer, error) {
+func (c *Client) GetEngineers() ([]devops_resource.Engineer, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/engineers", c.HostURL), nil)
 	if err != nil {
 		return nil, err

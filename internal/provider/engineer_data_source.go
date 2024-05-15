@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashicorp-demoapp/hashicups-client-go"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -34,7 +33,7 @@ type engineerDataSourceModel struct {
 	Engineer []engineerModel `tfsdk:"engineer"`
 	// implemented to allow testing framework to interact with this data source
 	// placeholder value is applied in Read method
-	ID types.String `tfsdk:"id"`
+	// ID types.String `tfsdk:"id"`
 }
 
 // hard coding for readability -- can also be imported via devops_resource
@@ -122,9 +121,9 @@ func (d *engineerDataSource) Read(ctx context.Context, req datasource.ReadReques
 		state.Engineer = append(state.Engineer, engineerState)
 	}
 
-	// data source needs an id attr for testing framework to perform tests
-	// this data source doesn't actually have an id so we just use a placeholder
-	state.ID = types.StringValue("placeholder")
+	// // data source needs an id attr for testing framework to perform tests
+	// // this data source doesn't actually have an id so we just use a placeholder
+	// state.ID = types.StringValue("placeholder")
 
 	// Set state
 	diags := resp.State.Set(ctx, &state)
@@ -140,7 +139,7 @@ func (d *engineerDataSource) Configure(_ context.Context, req datasource.Configu
 		return
 	}
 
-	client, ok := req.ProviderData.(*hashicups.Client)
+	client, ok := req.ProviderData.(*client.Client)
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Data Source Configure Type",
