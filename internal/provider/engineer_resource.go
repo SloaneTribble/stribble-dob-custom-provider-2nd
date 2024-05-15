@@ -102,7 +102,35 @@ func (r *engineerResource) Create(ctx context.Context, req resource.CreateReques
 
 // Read resource information.
 func (r *engineerResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	// Get current state
+	var state engineerResourceModel
+	diags := req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
+	// Get refreshed order value from HashiCups
+	engineer, err := r.client.GetEngineer(state.Id.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Error sending get request to devops-bootcamp api",
+			"Could not read engineer Id "+state.Id.ValueString()+": "+err.Error(),
+		)
+		return
+	}
+
+	// Map response body to schema and populate Computed attribute values
+	state.Name = engineer.Name
+	state.Id = types.StringValue(engineer.Id)
+	state.Email = engineer.Email
+
+	// Set refreshed state
+	diags = resp.State.Set(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 }
 
 // Update updates the resource and sets the updated Terraform state on success.

@@ -9,7 +9,27 @@ import (
 	devops_resource "github.com/liatrio/devops-bootcamp/examples/ch7/devops-resources"
 )
 
-// GetCoffees - Returns list of engineers (no auth required)
+func (c *Client) GetEngineer(engineerID string) (*devops_resource.Engineer, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/engineers/%s", c.HostURL, engineerID), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	engineer := devops_resource.Engineer{}
+	err = json.Unmarshal(body, &engineer)
+	if err != nil {
+		return nil, err
+	}
+
+	return &engineer, nil
+}
+
+// GetEngineers - Returns list of engineers (no auth required)
 func (c *Client) GetEngineers() ([]devops_resource.Engineer, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/engineers", c.HostURL), nil)
 	if err != nil {

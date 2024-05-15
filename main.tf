@@ -19,6 +19,6 @@ output "test_output" {
 }
 
 resource "devops-bootcamp_engineer_resource" "sweet" {
-    name = "Sloane"
-    email = "sloane@dudes.com"
+    name = "Myles"
+    email = "myles@dudes.com"
 }
