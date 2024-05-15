@@ -79,3 +79,26 @@ func (c *Client) CreateEngineer(engineer devops_resource.Engineer) (*devops_reso
 
 	return &order, nil
 }
+
+// ENGINEER UPDATE NEEDS ID, NAME AND EMAIL (NAME AND EMAIL CAN BE UPDATED)
+func (c *Client) UpdateEngineer(engineerId string, engineerNewName string) (*devops_resource.Engineer, error) {
+	rb := engineerNewName
+
+	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/engineers/%s", c.HostURL, engineerId), strings.NewReader(rb))
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	 := Order{}
+	err = json.Unmarshal(body, &order)
+	if err != nil {
+		return nil, err
+	}
+
+	return &order, nil
+}
