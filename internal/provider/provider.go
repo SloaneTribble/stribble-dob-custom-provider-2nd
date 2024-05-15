@@ -124,7 +124,7 @@ func (p *devopsBootcampProvider) Resources(ctx context.Context) []func() resourc
 
 func (p *devopsBootcampProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
-		NewExampleDataSource,
+		NewEngineerDataSource,
 	}
 }
 

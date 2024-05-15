@@ -53,42 +53,23 @@ func (d *engineerDataSource) Metadata(_ context.Context, req datasource.Metadata
 func (d *engineerDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
-			// testing framework frequires an id attr to be present in every data source and resource
-			// if a data source doesn't have an id, implement one with a placeholder value, like so
-			"id": schema.StringAttribute{
-				Computed: true,
-			},
+			// // testing framework frequires an id attr to be present in every data source and resource
+			// // if a data source doesn't have an id, implement one with a placeholder value, like so
+			// "id": schema.StringAttribute{
+			// 	Computed: true,
+			// },
 			"engineer": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"id": schema.Int64Attribute{
-							Computed: true,
-						},
 						"name": schema.StringAttribute{
 							Computed: true,
 						},
-						"teaser": schema.StringAttribute{
+						"id": schema.StringAttribute{
 							Computed: true,
 						},
-						"description": schema.StringAttribute{
+						"email": schema.StringAttribute{
 							Computed: true,
-						},
-						"price": schema.Float64Attribute{
-							Computed: true,
-						},
-						"image": schema.StringAttribute{
-							Computed: true,
-						},
-						"ingredients": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"id": schema.Int64Attribute{
-										Computed: true,
-									},
-								},
-							},
 						},
 					},
 				},
