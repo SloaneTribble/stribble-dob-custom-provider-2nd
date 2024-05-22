@@ -3,6 +3,7 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -10,7 +11,7 @@ import (
 )
 
 func (c *Client) GetEngineer(engineerID string) (*devops_resource.Engineer, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/engineers/%s", c.HostURL, engineerID), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/engineers/id/%s", c.HostURL, engineerID), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +65,7 @@ func (c *Client) CreateEngineer(engineer devops_resource.Engineer) (*devops_reso
 		return nil, err
 	}
 
-	// Perform the HTTP request without an authToken
+	// Perform the HTTP request
 	body, err := c.doRequest(req)
 	if err != nil {
 		return nil, err
@@ -80,25 +81,70 @@ func (c *Client) CreateEngineer(engineer devops_resource.Engineer) (*devops_reso
 	return &order, nil
 }
 
-// ENGINEER UPDATE NEEDS ID, NAME AND EMAIL (NAME AND EMAIL CAN BE UPDATED)
-func (c *Client) UpdateEngineer(engineerId string, engineerNewName string) (*devops_resource.Engineer, error) {
-	rb := engineerNewName
+// UpdateEngineer - Update an existing engineer
+func (c *Client) UpdateEngineer(engineer devops_resource.Engineer) (*devops_resource.Engineer, error) {
+	log.Printf("\nUpdating engineer: %+v\n", engineer) // Add debug log
 
-	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/engineers/%s", c.HostURL, engineerId), strings.NewReader(rb))
+	// Marshal the single Engineer into JSON
+	rb, err := json.Marshal(engineer)
 	if err != nil {
+		log.Printf("\nError marshalling engineer: %s\n", err) // Add debug log
 		return nil, err
 	}
 
+	// Create a new PUT request with the JSON body
+	req, err := http.NewRequest("PUT", fmt.Sprintf("%s/engineers/%s", c.HostURL, strings.Trim(engineer.Id, "\"")), strings.NewReader(string(rb)))
+	if err != nil {
+		log.Printf("\nError creating request: %v\n", req) // Add debug log
+		log.Printf("\nError creating request: %s\n", err) // Add debug log
+		return nil, err
+	}
+
+	// Perform the HTTP request
 	body, err := c.doRequest(req)
+	log.Printf("\nResponse body: %s\n", body) // Add debug log
 	if err != nil {
+		log.Printf("\nError performing request: %s\n", err) // Add debug log
 		return nil, err
 	}
 
-	 := Order{}
-	err = json.Unmarshal(body, &order)
+	// Unmarshal the response into an Engineer struct
+	// an_engineer := devops_resource.Engineer{}
+	err = json.Unmarshal(body, &engineer)
 	if err != nil {
+		log.Printf("\nError unmarshalling response: %s\n", err) // Add debug log
 		return nil, err
 	}
 
-	return &order, nil
+	return &engineer, nil
+}
+
+// DeleteEngineer - Delete an existing engineer
+func (c *Client) DeleteEngineer(id string) error {
+	log.Printf("\nDeleting engineer: %+s\n", id) // Add debug log
+
+	// Create a new Delete request with the JSON body
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/engineers/%s", c.HostURL, strings.Trim(id, "\"")), nil)
+	if err != nil {
+		log.Printf("\nError creating request: %v\n", req) // Add debug log
+		log.Printf("\nError creating request: %s\n", err) // Add debug log
+		return err
+	}
+
+	// Perform the HTTP request
+	body, err := c.doRequest(req)
+	log.Printf("\nResponse body: %s\n", body) // Add debug log
+	if err != nil {
+		log.Printf("\nError performing request: %s\n", err) // Add debug log
+		return err
+	}
+
+	// Unmarshal the response into an Engineer struct
+	// an_engineer := devops_resource.Engineer{}
+	if err != nil {
+		log.Printf("\nError unmarshalling response: %s\n", err) // Add debug log
+		return err
+	}
+
+	return nil
 }

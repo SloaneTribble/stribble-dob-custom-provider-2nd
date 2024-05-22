@@ -53,23 +53,22 @@ func (d *engineerDataSource) Metadata(_ context.Context, req datasource.Metadata
 func (d *engineerDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
-			// // testing framework frequires an id attr to be present in every data source and resource
-			// // if a data source doesn't have an id, implement one with a placeholder value, like so
-			// "id": schema.StringAttribute{
-			// 	Computed: true,
-			// },
 			"engineer": schema.ListNestedAttribute{
-				Computed: true,
+				MarkdownDescription: "Engineer attribute",
+				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							Computed: true,
+							MarkdownDescription: "Engineer Name required",
+							Required:            true,
 						},
 						"id": schema.StringAttribute{
-							Computed: true,
+							MarkdownDescription: "Engineer ID computed",
+							Computed:            true,
 						},
 						"email": schema.StringAttribute{
-							Computed: true,
+							MarkdownDescription: "Engineer Email required",
+							Required:            true,
 						},
 					},
 				},
@@ -124,7 +123,7 @@ func (d *engineerDataSource) Configure(_ context.Context, req datasource.Configu
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Data Source Configure Type",
-			fmt.Sprintf("Expected *hashicups.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *client.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return

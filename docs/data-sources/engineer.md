@@ -17,13 +17,16 @@ description: |-
 
 ### Read-Only
 
-- `engineer` (Attributes List) (see [below for nested schema](#nestedatt--engineer))
+- `engineer` (Attributes List) Engineer attribute (see [below for nested schema](#nestedatt--engineer))
 
 <a id="nestedatt--engineer"></a>
 ### Nested Schema for `engineer`
 
+Required:
+
+- `email` (String) Engineer Email required
+- `name` (String) Engineer Name required
+
 Read-Only:
 
-- `email` (String)
-- `id` (String)
-- `name` (String)
+- `id` (String) Engineer ID computed
